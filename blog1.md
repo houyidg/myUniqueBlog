@@ -44,7 +44,7 @@
 			2、访问Android机浏览器网页程序，可以在chrome浏览console看见手机浏览器网页程序运行的日志
 			
 	
-2. 基本完成公司Android项目之后，我就开始着手于优化项目，由于我觉得Android程序的优化是一个很较高大上的skill，一般人很少关注这方面，在之前就通过android studio monitors工具检查分析过当前app反复执行和手动回收占内存量、方法执行效率、对象引用链的分析。在这里，由于项目性能较好，我只使用Android studio的lint发现了有很多优化点，比如：多余的资源未引用、在布局中多余的嵌套以及缺少属性带来的性能消耗。最终又发现了handler内存泄露的问题，就是在activity里面定义一个非静态handler成员变量，在lint之后会提示“This Handler class should be static or leaks might occur”，handler类应该是静态的否则也许会发生内存泄露，这个问题比较繁多不赘述，找到一篇较好的资料[http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2014/1106/1922.html](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2014/1106/1922.html)，我项目中的写法如下
+2. 基本完成公司Android项目之后，我就开始着手于优化项目，因为我觉得Android程序的优化是一个很较高大上的skill，然而一般人很少关注这方面，在之前就通过android studio monitors工具检查分析过当前app反复执行和手动回收占内存量、方法执行效率、对象引用链的分析。在这里，由于项目性能较好，我只使用Android studio的lint发现了有很多优化点，比如：多余的资源未引用、在布局中多余的嵌套以及缺少属性带来的性能消耗。其中发现了handler内存泄露的问题，就是在activity里面定义一个非静态handler成员变量，在lint之后会提示“This Handler class should be static or leaks might occur”，handler类应该是静态的否则也许会发生内存泄露，这个问题比较繁多不赘述，找到一篇较好的资料[http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2014/1106/1922.html](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2014/1106/1922.html)，我项目中的写法如下
 
 		private static   abstract class MyHandler<T> extends android.os.Handler{
         private final WeakReference<T> objWeakReference;
