@@ -2,7 +2,7 @@
 # 开发和学习编程中的备忘录 #
 > 我觉得这几天学习到很多东西，那是可贵的经验，但是自己文笔又不好，只能按简单的列表一条一条记录…………
 
-1. 最近Android端有个小需求，是要通过（qq、微信、浏览器）扫描二维码，访问获取的网址，该网址反回的结果由服务端注入一段js脚本和就可以携带数据且启动Android/ios里面的app，这时第三方app里面js与原生app交互存在一个协议，这个协议配置：
+1. Deep Link 最近Android端有个小需求，是要通过（qq、微信、浏览器）扫描二维码，访问获取的网址，该网址反回的结果由服务端注入一段js脚本和就可以携带数据且启动Android/ios里面的app，这时第三方app里面js与原生app交互存在一个协议，这个协议配置：
 
 	- Android项目的manifests文件里找到启动入口activity配置节点添加
 	
@@ -42,9 +42,10 @@
 	
 			1、连接手机adb至电脑，打开chrome输入“chrome://inspect”找到自己的Android机连接
 			2、访问Android机浏览器网页程序，可以在chrome浏览console看见手机浏览器网页程序运行的日志
-			
+
+2. App Link(6.0 or higher):https://developer.android.com/training/app-links/
 	
-2. 基本完成公司Android项目之后，我就开始着手于优化项目，因为我觉得Android程序的优化是一个很较高大上的skill，然而一般人很少关注这方面，在之前就通过android studio monitors工具检查分析过当前app反复执行和手动回收占内存量、方法执行效率、对象引用链的分析。在这里，由于项目性能较好，我只使用Android studio的lint发现了有很多优化点，比如：多余的资源未引用、在布局中多余的嵌套以及缺少属性带来的性能消耗。其中发现了handler内存泄露的问题，就是在activity里面定义一个非静态handler成员变量，在lint之后会提示“This Handler class should be static or leaks might occur”，handler类应该是静态的否则也许会发生内存泄露，这个问题比较繁多不赘述，找到一篇较好的资料[http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2014/1106/1922.html](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2014/1106/1922.html)，我项目中的写法如下
+3. 基本完成公司Android项目之后，我就开始着手于优化项目，因为我觉得Android程序的优化是一个很较高大上的skill，然而一般人很少关注这方面，在之前就通过android studio monitors工具检查分析过当前app反复执行和手动回收占内存量、方法执行效率、对象引用链的分析。在这里，由于项目性能较好，我只使用Android studio的lint发现了有很多优化点，比如：多余的资源未引用、在布局中多余的嵌套以及缺少属性带来的性能消耗。其中发现了handler内存泄露的问题，就是在activity里面定义一个非静态handler成员变量，在lint之后会提示“This Handler class should be static or leaks might occur”，handler类应该是静态的否则也许会发生内存泄露，这个问题比较繁多不赘述，找到一篇较好的资料[http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2014/1106/1922.html](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2014/1106/1922.html)，我项目中的写法如下
 
 		private static   abstract class MyHandler<T> extends android.os.Handler{
         private final WeakReference<T> objWeakReference;
